@@ -1,17 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// Definir un Web Component, para que Angular (container-app) lo reconozca como tal
+class ReactSearchElement extends HTMLElement {
+  connectedCallback() {
+    // Crear un shadow DOM opcionalmente (si lo necesitas)
+    const mountPoint = document.createElement("div");
+    this.appendChild(mountPoint);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    ReactDOM.render(<App />, mountPoint);
+  }
+}
+
+// Registrar el Web Component
+customElements.define("react-search-bar", ReactSearchElement);
+
+/*
+EXPLICACION:
+
+- connectedCallback() se ejecuta cuando el elemento se inserta en el DOM.
+- Se crea un <div> dentro del Web Component y se renderiza App allí.
+- Ahora se puede usar <react-search-bar></react-search-bar> en cualquier parte, incluso en Angular.
+*/
